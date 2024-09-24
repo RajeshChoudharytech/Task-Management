@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # Backend Service
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    container_name: backend
+    restart: always
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379
+      - DATABASE_NAME=postgres  # Add your database name
+      - DATABASE_USER=postgres          # PostgreSQL user
+      - DATABASE_PASSWORD=postgres      # PostgreSQL password
+      - DATABASE_HOST=db                # Hostname of the PostgreSQL service
+      - DATABASE_PORT=5432   
+    command: >
+      sh -c "python manage.py migrate &&
+      daphne -b 0.0.0.0 -p 8000 task_management.asgi:application"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend  # This context should be the frontend directory
+      dockerfile: Dockerfile  # This should just be Dockerfile
+    container_name: frontend
+    restart: always
+    volumes:
+      - ./frontend:/app
+    command: npm start
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  # PostgreSQL Database Service
+  db:
+    image: postgres:13
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # Redis Service
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # Celery Worker Service
+  celery:
+    build:
+      context: .
+      dockerfile: ./backend/celery.Dockerfile
+    container_name: celery
+    restart: always
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - db
+    command: celery -A task_management worker --loglevel=info --concurrency=2
+
+volumes:
+  db_data:

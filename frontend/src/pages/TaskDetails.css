@@ -1,0 +1,90 @@
+/* TaskDetails.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.task-details-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.task-details-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.task-details-content {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.task-details-content p {
+    margin: 10px 0;
+}
+
+.task-details-content strong {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Status Label */
+.status-label {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.status-label.queued {
+    background-color: #f0ad4e;
+}
+
+.status-label.in_progress {
+    background-color: #5bc0de;
+}
+
+.status-label.completed {
+    background-color: #5cb85c;
+}
+
+.status-label.failed {
+    background-color: #d9534f;
+}
+
+/* Loading State */
+.loading {
+    font-size: 18px;
+    color: #333;
+    text-align: center;
+    margin-top: 40px;
+}
+
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
